@@ -21,7 +21,7 @@ Registered users run the application while logged into a registered account. Reg
 #### Actions
 1. **Search for stories**
 2. **Read selected story**
-3. **Follow selected story**
+3. **Favorite selected story**
 4. **Comment on selected story**
 5. **Create new story**
 6. **Work on created story**
