@@ -1,14 +1,23 @@
 package com.revature.models;
 
+import java.util.List;
+
 public class User {
 	private int id;
+
+	// User's name
 	private String firstName;
 	private String lastName;
+
+	// User information
 	private String email;
-	private String password;
 	private String phoneNumber;
-	private Long dob;
+	private long dob;
+
+	// Account details
+	private String password;
 	private String picture;
+	private List<Story> favoriteStories;
 
 	public int getId() {
 		return id;
@@ -42,14 +51,6 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -58,12 +59,20 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Long getDob() {
+	public long getDob() {
 		return dob;
 	}
 
-	public void setDob(Long dob) {
+	public void setDob(long dob) {
 		this.dob = dob;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getPicture() {
@@ -74,12 +83,21 @@ public class User {
 		this.picture = picture;
 	}
 
+	public List<Story> getFavoriteStories() {
+		return favoriteStories;
+	}
+
+	public void setFavoriteStories(List<Story> favoriteStories) {
+		this.favoriteStories = favoriteStories;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
+		result = prime * result + (int) (dob ^ (dob >>> 32));
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((favoriteStories == null) ? 0 : favoriteStories.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -98,15 +116,17 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (dob == null) {
-			if (other.dob != null)
-				return false;
-		} else if (!dob.equals(other.dob))
+		if (dob != other.dob)
 			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
+			return false;
+		if (favoriteStories == null) {
+			if (other.favoriteStories != null)
+				return false;
+		} else if (!favoriteStories.equals(other.favoriteStories))
 			return false;
 		if (firstName == null) {
 			if (other.firstName != null)
@@ -141,26 +161,26 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", dob=" + dob + ", picture=" + picture
-				+ "]";
+				+ ", phoneNumber=" + phoneNumber + ", dob=" + dob + ", password=" + password + ", picture=" + picture
+				+ ", favoriteStories=" + favoriteStories + "]";
 	}
 
-	public User(int id, String firstName, String lastName, String email, String password, String phoneNumber, Long dob,
-			String picture) {
+	public User(int id, String firstName, String lastName, String email, String phoneNumber, long dob, String password,
+			String picture, List<Story> favoriteStories) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.dob = dob;
+		this.password = password;
 		this.picture = picture;
+		this.favoriteStories = favoriteStories;
 	}
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 }

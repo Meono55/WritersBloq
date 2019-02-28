@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 
 public class Chapter {
 	private int id;
+	
+	// Chapter story information
 	private int storyId;
 	private String title;
+	
+	// Chapter publishing details
 	private LocalDateTime creationDate;
 	private boolean isPublished;
 

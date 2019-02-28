@@ -4,12 +4,18 @@ import java.time.LocalDateTime;
 
 public class Story {
 	private int id;
+
+	// Story information
 	private String title;
 	private String authorId;
 	private String summary;
 	private LocalDateTime creationDate;
 	private String bookCover;
 	private boolean isPublished;
+
+	// Values for determining rating
+	private int actualRating;
+	private int possibleRating;
 
 	public int getId() {
 		return id;
@@ -67,15 +73,33 @@ public class Story {
 		this.isPublished = isPublished;
 	}
 
+	public int getActualRating() {
+		return actualRating;
+	}
+
+	public void setActualRating(int actualRating) {
+		this.actualRating = actualRating;
+	}
+
+	public int getPossibleRating() {
+		return possibleRating;
+	}
+
+	public void setPossibleRating(int possibleRating) {
+		this.possibleRating = possibleRating;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + actualRating;
 		result = prime * result + ((authorId == null) ? 0 : authorId.hashCode());
 		result = prime * result + ((bookCover == null) ? 0 : bookCover.hashCode());
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + id;
 		result = prime * result + (isPublished ? 1231 : 1237);
+		result = prime * result + possibleRating;
 		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
@@ -90,6 +114,8 @@ public class Story {
 		if (getClass() != obj.getClass())
 			return false;
 		Story other = (Story) obj;
+		if (actualRating != other.actualRating)
+			return false;
 		if (authorId == null) {
 			if (other.authorId != null)
 				return false;
@@ -109,6 +135,8 @@ public class Story {
 			return false;
 		if (isPublished != other.isPublished)
 			return false;
+		if (possibleRating != other.possibleRating)
+			return false;
 		if (summary == null) {
 			if (other.summary != null)
 				return false;
@@ -125,11 +153,12 @@ public class Story {
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", title=" + title + ", authorId=" + authorId + ", summary=" + summary
-				+ ", creationDate=" + creationDate + ", bookCover=" + bookCover + ", isPublished=" + isPublished + "]";
+				+ ", creationDate=" + creationDate + ", bookCover=" + bookCover + ", isPublished=" + isPublished
+				+ ", actualRating=" + actualRating + ", possibleRating=" + possibleRating + "]";
 	}
 
 	public Story(int id, String title, String authorId, String summary, LocalDateTime creationDate, String bookCover,
-			boolean isPublished) {
+			boolean isPublished, int actualRating, int possibleRating) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -138,11 +167,12 @@ public class Story {
 		this.creationDate = creationDate;
 		this.bookCover = bookCover;
 		this.isPublished = isPublished;
+		this.actualRating = actualRating;
+		this.possibleRating = possibleRating;
 	}
 
 	public Story() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 }
