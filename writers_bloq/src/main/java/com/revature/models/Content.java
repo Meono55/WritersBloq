@@ -1,4 +1,4 @@
-package com.revature.beans;
+package com.revature.models;
 
 public class Content {
 	private int id;

@@ -1,8 +1,8 @@
-package com.revature.beans;
+package com.revature.models;
 
-public class Tag {
+public class Genre {
 	private int id;
-	private String tagName;
+	private String genre;
 
 	public int getId() {
 		return id;
@@ -12,20 +12,20 @@ public class Tag {
 		this.id = id;
 	}
 
-	public String getTagName() {
-		return tagName;
+	public String getGenre() {
+		return genre;
 	}
 
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public void setGenre(String genre) {
+		this.genre = genre;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((tagName == null) ? 0 : tagName.hashCode());
 		return result;
 	}
 
@@ -37,29 +37,29 @@ public class Tag {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Tag other = (Tag) obj;
-		if (id != other.id)
-			return false;
-		if (tagName == null) {
-			if (other.tagName != null)
+		Genre other = (Genre) obj;
+		if (genre == null) {
+			if (other.genre != null)
 				return false;
-		} else if (!tagName.equals(other.tagName))
+		} else if (!genre.equals(other.genre))
+			return false;
+		if (id != other.id)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Tag [id=" + id + ", tagName=" + tagName + "]";
+		return "Genre [id=" + id + ", genre=" + genre + "]";
 	}
 
-	public Tag(int id, String tagName) {
+	public Genre(int id, String genre) {
 		super();
 		this.id = id;
-		this.tagName = tagName;
+		this.genre = genre;
 	}
 
-	public Tag() {
+	public Genre() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

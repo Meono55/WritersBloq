@@ -1,13 +1,14 @@
-package com.revature.beans;
+package com.revature.models;
 
 import java.time.LocalDateTime;
 
-public class Chapter {
+public class Comments {
 	private int id;
 	private int storyId;
-	private String title;
+	private int authorId;
+	private String content;
 	private LocalDateTime creationDate;
-	private boolean isPublished;
+	private boolean isSpoiler;
 
 	public int getId() {
 		return id;
@@ -25,12 +26,20 @@ public class Chapter {
 		this.storyId = storyId;
 	}
 
-	public String getTitle() {
-		return title;
+	public int getAuthorId() {
+		return authorId;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public LocalDateTime getCreationDate() {
@@ -41,23 +50,24 @@ public class Chapter {
 		this.creationDate = creationDate;
 	}
 
-	public boolean isPublished() {
-		return isPublished;
+	public boolean isSpoiler() {
+		return isSpoiler;
 	}
 
-	public void setPublished(boolean isPublished) {
-		this.isPublished = isPublished;
+	public void setSpoiler(boolean isSpoiler) {
+		this.isSpoiler = isSpoiler;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + authorId;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + id;
-		result = prime * result + (isPublished ? 1231 : 1237);
+		result = prime * result + (isSpoiler ? 1231 : 1237);
 		result = prime * result + storyId;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -69,7 +79,14 @@ public class Chapter {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Chapter other = (Chapter) obj;
+		Comments other = (Comments) obj;
+		if (authorId != other.authorId)
+			return false;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
 		if (creationDate == null) {
 			if (other.creationDate != null)
 				return false;
@@ -77,34 +94,30 @@ public class Chapter {
 			return false;
 		if (id != other.id)
 			return false;
-		if (isPublished != other.isPublished)
+		if (isSpoiler != other.isSpoiler)
 			return false;
 		if (storyId != other.storyId)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Chapter [id=" + id + ", storyId=" + storyId + ", title=" + title + ", creationDate=" + creationDate
-				+ ", isPublished=" + isPublished + "]";
+		return "Comments [id=" + id + ", storyId=" + storyId + ", authorId=" + authorId + ", content=" + content
+				+ ", creationDate=" + creationDate + ", isSpoiler=" + isSpoiler + "]";
 	}
 
-	public Chapter(int id, int storyId, String title, LocalDateTime creationDate, boolean isPublished) {
+	public Comments(int id, int storyId, int authorId, String content, LocalDateTime creationDate, boolean isSpoiler) {
 		super();
 		this.id = id;
 		this.storyId = storyId;
-		this.title = title;
+		this.authorId = authorId;
+		this.content = content;
 		this.creationDate = creationDate;
-		this.isPublished = isPublished;
+		this.isSpoiler = isSpoiler;
 	}
 
-	public Chapter() {
+	public Comments() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
