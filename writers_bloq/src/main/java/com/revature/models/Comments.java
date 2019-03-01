@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 
 public class Comments {
 	private int id;
-	private int storyId;
+	
+	// Author of content
 	private int authorId;
+	
+	// Comment information
+	private int storyId;
 	private String content;
 	private LocalDateTime creationDate;
 	private boolean isSpoiler;
