@@ -25,22 +25,6 @@ public class AuthService {
   }
 
   /**
-   * Create a random token and check the database for uniqueness
-   * @return a newly created token value
-   */
-//  public String createToken() {
-//    Long random;
-//    String token;
-//    // Check for token uniqueness
-//    do {
-//      // Create a token
-//      random = (long) (Math.random() * Long.MAX_VALUE);
-//      token = random.toString();
-//    } while (this.authRepo.tokenExists(token));
-//    return token;
-//  }
-
-  /**
    * Gets an existing user and checks if the credentials are correct then creates
    * a token and attaches the user to the token to remember them later
    * @param credentials contains email and password representing login information
@@ -55,6 +39,13 @@ public class AuthService {
     // Create and save a new token
     Token token = new Token(this.authRepo.createNewToken(), user);
     return this.authRepo.saveToken(token);
+  }
+  
+  
+  public User getLoggedInUser(String tokenValue) {
+    Token token = this.authRepo.getToken(tokenValue);
+    if (token == null) throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Please login");
+    return token.getUser();
   }
 
 }

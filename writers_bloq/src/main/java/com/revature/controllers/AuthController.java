@@ -46,13 +46,12 @@ public class AuthController {
 	}
 	
 	/**
-	 * 
-	 * @param idVal
-	 * @return
+	 * Gets an authenticated user using the token value
+	 * @param tokenValue
+	 * @return the logged in user
 	 */
-	@GetMapping
-	public String getLoggedInUser(@CookieValue("p2-token") String tokenValue) {
-	  
-		return tokenValue;
+	@GetMapping("")
+	public User getLoggedInUser(@CookieValue("p2-token") String tokenValue) {
+		return this.auth.getLoggedInUser(tokenValue);
 	}
 }

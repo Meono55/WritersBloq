@@ -4,6 +4,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -46,8 +47,22 @@ public class AuthRepo {
   public Token saveToken(Token token) {
     SessionFactory sf = emf.unwrap(SessionFactory.class);
     try (Session session = sf.openSession()) {
+      Transaction tx = session.beginTransaction();
       session.save(token);
+      tx.commit();
       return token;
+    }
+  }
+  
+  /**
+   * Gets a token in from the database
+   * @param tokenValue from a client
+   * @return the token if its found, null if its not
+   */
+  public Token getToken(String tokenValue) {
+    SessionFactory sf = emf.unwrap(SessionFactory.class);
+    try (Session session = sf.openSession()) {
+      return session.get(Token.class, tokenValue);
     }
   }
 

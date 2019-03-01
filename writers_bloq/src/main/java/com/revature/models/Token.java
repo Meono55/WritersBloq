@@ -3,8 +3,10 @@ package com.revature.models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="tokens")
 public class Token {
   @Id
   private String value;
