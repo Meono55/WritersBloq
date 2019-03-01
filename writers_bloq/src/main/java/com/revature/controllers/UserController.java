@@ -1,5 +1,9 @@
 package com.revature.controllers;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,37 +13,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.dto.CredentialsDTO;
+import com.revature.models.Token;
 import com.revature.models.User;
+import com.revature.services.UserService;
 
-@CrossOrigin(methods = { RequestMethod.GET, RequestMethod.POST })
+@CrossOrigin(
+    methods = { RequestMethod.GET, RequestMethod.POST }
+    )
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
+  
+  UserService userService;
+  
+  @Autowired
+	public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
-	/**
-	 * Retrieve a user from the database based off the provided login credentials.
-	 * 
-	 * @param loginCredentials The data transfer object containing the login
-	 *                         information.
-	 * @return The user account associated with the provided credentials. Null is
-	 *         returned if no account could be found.
-	 */
-	@PostMapping(path = "/login", produces = "application/json")
-	public User login(CredentialsDTO loginCredentials) {
-		return null;
-	}
-
-	/**
+  /**
 	 * Adds a new user to the database.
 	 * 
-	 * @param newUser The information of the user to add to the database.
+	 * @param user The information of the user to add to the database.
 	 * @return The user that was added to the database. Null is returned if the user
 	 *         was not added to the database.
 	 */
-	@PostMapping(path = "/sign-up")
-	public User signUp(@RequestBody User newUser) {
-		return null;
+	@PostMapping(path="", produces="application/json")
+	public User register(HttpServletResponse res, @RequestBody User user) {
+	  Token token = this.userService.register(user);
+	  Cookie cookie = new Cookie("p2-token", token.getValue());
+	  res.addCookie(cookie);
+	  token.getUser().setPassword("");
+	  return token.getUser();
 	}
 
 	/**
@@ -49,8 +54,8 @@ public class UserController {
 	 * @return The user associated with the provided id number. Null is returned if
 	 *         the user could not be found or not be retrieved in the database.
 	 */
-	@GetMapping(path = "/{userId}", produces = "application/json")
-	public User getUser(@PathVariable(name = "userId") int idValue) {
+	@GetMapping(path = "/{id}", produces = "application/json")
+	public User getUser(@PathVariable int id) {
 		return null;
 	}
 }

@@ -16,26 +16,38 @@ public class AuthRepo {
   EntityManagerFactory emf;
 
   /**
-   * Checks the database to see if a given token already exists.
-   * @param tokenValue to be checked
-   * @return true if token is found, and false if not
+   * Creates a token and checks if the database already includes the token
+   * @return the token if it is unique else get a different token until its unique
    */
-  public boolean tokenExists(String tokenValue) {
+  public String createNewToken() {
+    Long random;
+    String tokenValue;
+    Token found;
+ 
     SessionFactory sf = emf.unwrap(SessionFactory.class);
     try (Session session = sf.openSession()) {
-      Token found = session.get(Token.class, tokenValue);
-      return found != null;
+      // Create a token and see if it already exists
+      do {
+        random = (long) (Math.random() * Long.MAX_VALUE);
+        tokenValue = random.toString();
+        found = session.get(Token.class, tokenValue);
+      } while (found != null);
+      
+      // Return the unique token
+      return tokenValue;
     }
   }
 
   /**
    * Saves a newly created token to the database
    * @param token to be saved
+   * @return token that was saved
    */
-  public void saveToken(Token token) {
+  public Token saveToken(Token token) {
     SessionFactory sf = emf.unwrap(SessionFactory.class);
     try (Session session = sf.openSession()) {
       session.save(token);
+      return token;
     }
   }
 

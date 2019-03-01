@@ -28,17 +28,17 @@ public class AuthService {
    * Create a random token and check the database for uniqueness
    * @return a newly created token value
    */
-  public String createToken() {
-    Long random;
-    String token;
-    // Check for token uniqueness
-    do {
-      // Create a token
-      random = (long) (Math.random() * Long.MAX_VALUE);
-      token = random.toString();
-    } while (this.authRepo.tokenExists(token));
-    return token;
-  }
+//  public String createToken() {
+//    Long random;
+//    String token;
+//    // Check for token uniqueness
+//    do {
+//      // Create a token
+//      random = (long) (Math.random() * Long.MAX_VALUE);
+//      token = random.toString();
+//    } while (this.authRepo.tokenExists(token));
+//    return token;
+//  }
 
   /**
    * Gets an existing user and checks if the credentials are correct then creates
@@ -53,9 +53,8 @@ public class AuthService {
       throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Invalid login credentials");
     }
     // Create and save a new token
-    Token token = new Token(createToken(), user);
-    this.authRepo.saveToken(token);
-    return token;
+    Token token = new Token(this.authRepo.createNewToken(), user);
+    return this.authRepo.saveToken(token);
   }
 
 }
