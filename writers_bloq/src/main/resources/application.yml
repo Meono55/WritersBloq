@@ -1,6 +1,6 @@
-server:
-  port: 8081
-
-spring:
-  application:
-    name: BootApp
+#server:
+#  port: 8081
+#
+#spring:
+#  application:
+#    name: BootApp

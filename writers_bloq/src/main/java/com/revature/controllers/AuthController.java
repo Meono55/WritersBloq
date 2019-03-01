@@ -1,0 +1,35 @@
+package com.revature.controllers;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.revature.dto.CredentialsDTO;
+import com.revature.models.User;
+
+public class AuthController {
+	
+	/**
+	 * Retrieve a user from the database based off the provided login credentials.
+	 * 
+	 * @param loginCredentials The data transfer object containing the login
+	 *                         information.
+	 * @return The user account associated with the provided credentials. Null is
+	 *         returned if no account could be found.
+	 */
+	@PostMapping(path="/login", produces="application/json")
+	public User login(@RequestBody CredentialsDTO loginCredentials) {
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param idVal
+	 * @return
+	 */
+	@GetMapping(path="/{userId}")
+	public User getLoggedInUser(@PathVariable(name="userId") int idVal) {
+		return null;
+	}
+}
