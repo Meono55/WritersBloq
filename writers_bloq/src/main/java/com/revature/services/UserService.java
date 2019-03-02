@@ -28,10 +28,12 @@ public class UserService {
    * @return the token to represent the user is logged in
    */
   public Token register(User user) {
+    // Validate user and protect the password
     user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+    
+    // Save the user and generate a token for the user
     user = this.userRepo.saveUser(user);
-    Token token = new Token(this.authRepo.createNewToken(), user);
-    return this.authRepo.saveToken(token);
+    return this.authRepo.generateToken(user);
   }
 
 }

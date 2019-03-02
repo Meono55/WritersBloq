@@ -9,50 +9,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.revature.models.Token;
+import com.revature.models.User;
 
 @Repository
 public class AuthRepo {
 
   @Autowired
   EntityManagerFactory emf;
-
+  
   /**
-   * Creates a token and checks if the database already includes the token
-   * @return the token if it is unique else get a different token until its unique
+   * Generate a new token value for a user while removing previously assigned tokens from the user
+   * @param user to generate a token for
+   * @return the generated token to be given to the client
    */
-  public String createNewToken() {
+  public Token generateToken(User user) {
     Long random;
     String tokenValue;
     Token found;
- 
+    
     SessionFactory sf = emf.unwrap(SessionFactory.class);
     try (Session session = sf.openSession()) {
-      // Create a token and see if it already exists
+      Transaction tx = session.beginTransaction();
+      
+      // Check if user already has a token and delete it
+      if (user.getToken() != null) user.setToken(null);
+      
+      // Create a unique token value
       do {
         random = (long) (Math.random() * Long.MAX_VALUE);
         tokenValue = random.toString();
         found = session.get(Token.class, tokenValue);
       } while (found != null);
       
-      // Return the unique token
-      return tokenValue;
-    }
-  }
-
-  /**
-   * Saves a newly created token to the database
-   * @param token to be saved
-   * @return token that was saved
-   */
-  public Token saveToken(Token token) {
-    SessionFactory sf = emf.unwrap(SessionFactory.class);
-    try (Session session = sf.openSession()) {
-      Transaction tx = session.beginTransaction();
-      session.save(token);
+      // Assign token value to user and save updates
+      user.setToken(new Token(tokenValue, user));
+      session.merge(user);
+      
       tx.commit();
-      return token;
+      return user.getToken();
     }
   }
+  
+  
   
   /**
    * Gets a token in from the database
@@ -62,6 +60,7 @@ public class AuthRepo {
   public Token getToken(String tokenValue) {
     SessionFactory sf = emf.unwrap(SessionFactory.class);
     try (Session session = sf.openSession()) {
+      if (tokenValue == null) return null;
       return session.get(Token.class, tokenValue);
     }
   }

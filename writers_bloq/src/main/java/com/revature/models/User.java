@@ -1,11 +1,18 @@
 package com.revature.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "users")
@@ -26,17 +33,24 @@ public class User {
 	private long dob;
 
 	// Account details
+	@JsonProperty(access=Access.WRITE_ONLY) // Stops Jackson from writing password back to clients
 	private String password;
 	
 	@Column(name="profile_pic")
 	private String profilePic;
+
+	@OneToOne(orphanRemoval=true, cascade=CascadeType.ALL)
+	@JoinColumn(nullable=true)
+	@JsonIgnore
+  private Token token;
 
   public User() {
     super();
     // TODO Auto-generated constructor stub
   }
 
-  public User(int id, String firstName, String lastName, String email, long dob, String password, String profilePic) {
+  public User(int id, String firstName, String lastName, String email, long dob, String password, String profilePic,
+      Token token) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -45,6 +59,7 @@ public class User {
     this.dob = dob;
     this.password = password;
     this.profilePic = profilePic;
+    this.token = token;
   }
 
   public int getId() {
@@ -103,6 +118,14 @@ public class User {
     this.profilePic = profilePic;
   }
 
+  public Token getToken() {
+    return token;
+  }
+
+  public void setToken(Token token) {
+    this.token = token;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -114,6 +137,7 @@ public class User {
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((password == null) ? 0 : password.hashCode());
     result = prime * result + ((profilePic == null) ? 0 : profilePic.hashCode());
+    result = prime * result + ((token == null) ? 0 : token.hashCode());
     return result;
   }
 
@@ -155,12 +179,18 @@ public class User {
         return false;
     } else if (!profilePic.equals(other.profilePic))
       return false;
+    if (token == null) {
+      if (other.token != null)
+        return false;
+    } else if (!token.equals(other.token))
+      return false;
     return true;
   }
 
   @Override
   public String toString() {
     return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", dob="
-        + dob + ", password=" + password + ", profilePic=" + profilePic + "]";
+        + dob + ", password=" + password + ", profilePic=" + profilePic + ", token=" + token + "]";
   }
+
 }

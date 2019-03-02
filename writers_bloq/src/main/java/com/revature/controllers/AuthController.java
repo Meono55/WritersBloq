@@ -21,10 +21,10 @@ import com.revature.services.AuthService;
 public class AuthController {
   
   // Get authService from Spring
-  AuthService auth;
+  AuthService authService;
   @Autowired
-	public AuthController(AuthService auth) {
-    this.auth = auth;
+	public AuthController(AuthService authService) {
+    this.authService = authService;
   }
 
   
@@ -38,10 +38,9 @@ public class AuthController {
 	 */
 	@PostMapping(produces="application/json")
 	public User login(HttpServletResponse res, @RequestBody CredentialsDTO credentials) {
-	  Token token = this.auth.login(credentials);
+	  Token token = this.authService.login(credentials);
 	  Cookie cookie = new Cookie("p2-token", token.getValue());
 	  res.addCookie(cookie);
-	  token.getUser().setPassword("");
 	  return token.getUser();
 	}
 	
@@ -51,7 +50,7 @@ public class AuthController {
 	 * @return the logged in user
 	 */
 	@GetMapping("")
-	public User getLoggedInUser(@CookieValue("p2-token") String tokenValue) {
-		return this.auth.getLoggedInUser(tokenValue);
+	public User getLoggedInUser(@CookieValue(value="p2-token", required=false) String tokenValue) {
+		return this.authService.getLoggedInUser(tokenValue);
 	}
 }
