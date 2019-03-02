@@ -15,11 +15,15 @@ public class StoryServices {
 	StoryRepo storyRepo;
 	AuthRepo authRepo;
 
+
 	@Autowired
-	public StoryServices(StoryRepo storyRepo) {
+	public StoryServices(StoryRepo storyRepo, AuthRepo authRepo) {
 		super();
 		this.storyRepo = storyRepo;
+		this.authRepo = authRepo;
 	}
+
+
 
 	/**
 	 * Validate user input, creates a new story in the database using the StoryRepo.
@@ -37,9 +41,33 @@ public class StoryServices {
 		
 		// Initialize auto-generated values
 		newStory.setCreationDate(System.currentTimeMillis());
+		newStory.setModifiedDate(System.currentTimeMillis());
 		newStory.setAuthor(token.getUser());
 
 		// Save story to database
 		return storyRepo.saveStory(newStory);
+	}
+	
+	/**
+	 * Changed the appropriate story values on the database to match the updated story values provided. 
+	 * @param updatedStory object containing the updated story values.
+	 * @return the updated story object
+	 */
+	public Story editStory(Story updatedStory) {
+		Story currStory = getStoryById(updatedStory.getId());
+		currStory.setModifiedDate(System.currentTimeMillis());
+		currStory.setTitle(updatedStory.getTitle());
+		currStory.setSummary(updatedStory.getSummary());
+		
+		return storyRepo.editStory(currStory);
+	}
+	
+	/**
+	 * Retrieves the story from the database using a provided id.
+	 * @param id of the story in the database
+	 * @return the story object of the retrieved story.
+	 */
+	public Story getStoryById(int id) {
+		return storyRepo.getStoryById(id);
 	}
 }

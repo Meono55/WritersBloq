@@ -9,6 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
+import com.revature.models.Story;
 import com.revature.models.Token;
 import com.revature.models.User;
 
@@ -22,7 +23,7 @@ public class HibernateConfig {
     factoryBean.setConfigLocation(new ClassPathResource("hibernate.cfg.xml"));
     
     // Set annotated Classes
-    factoryBean.setAnnotatedClasses(User.class, Token.class);
+    factoryBean.setAnnotatedClasses(User.class, Token.class, Story.class);
     factoryBean.setDataSource(getDataSource());
     return factoryBean;
   }
@@ -31,10 +32,10 @@ public class HibernateConfig {
   public DataSource getDataSource() {
     System.out.println("Configuring data source");
     BasicDataSource dataSource = new BasicDataSource();
-    dataSource.setDriverClassName("org.postgresql.Driver");
-    dataSource.setUrl("jdbc:postgresql://localhost:5432/p2-db");
-    dataSource.setUsername("postgres");
-    dataSource.setPassword(System.getenv("pgsql_local"));
+	dataSource.setDriverClassName("org.postgresql.Driver");
+	dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+	dataSource.setUsername("bank_project_jdbc");
+	dataSource.setPassword("top-secret-password");
     return dataSource;
   }
   

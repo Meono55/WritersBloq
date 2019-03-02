@@ -28,14 +28,14 @@ public class Story {
 
 	private String summary;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<Chapter> chapters;
+//	@OneToMany(fetch = FetchType.LAZY)
+//	private List<Chapter> chapters;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<Comments> comments;
+//	@OneToMany(fetch = FetchType.LAZY)
+//	private List<Comments> comments;
 
 	@Column(name = "creation_date")
-	private long creationDate;
+	private Long creationDate;
 
 	@Column(name = "book_cover")
 	private String bookCover;
@@ -49,6 +49,9 @@ public class Story {
 
 	@Column(name = "possible_rating")
 	private int possibleRating;
+	
+	@Column(name="modified_date")
+	private Long modifiedDate;
 
 	public int getId() {
 		return id;
@@ -82,27 +85,11 @@ public class Story {
 		this.summary = summary;
 	}
 
-	public List<Chapter> getChapters() {
-		return chapters;
-	}
-
-	public void setChapters(List<Chapter> chapters) {
-		this.chapters = chapters;
-	}
-
-	public List<Comments> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comments> comments) {
-		this.comments = comments;
-	}
-
-	public long getCreationDate() {
+	public Long getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate) {
+	public void setCreationDate(Long creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -138,6 +125,14 @@ public class Story {
 		this.possibleRating = possibleRating;
 	}
 
+	public Long getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Long modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -145,11 +140,10 @@ public class Story {
 		result = prime * result + actualRating;
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((bookCover == null) ? 0 : bookCover.hashCode());
-		result = prime * result + ((chapters == null) ? 0 : chapters.hashCode());
-		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-		result = prime * result + (int) (creationDate ^ (creationDate >>> 32));
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + id;
 		result = prime * result + (isPublished ? 1231 : 1237);
+		result = prime * result + ((modifiedDate == null) ? 0 : modifiedDate.hashCode());
 		result = prime * result + possibleRating;
 		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -177,21 +171,19 @@ public class Story {
 				return false;
 		} else if (!bookCover.equals(other.bookCover))
 			return false;
-		if (chapters == null) {
-			if (other.chapters != null)
+		if (creationDate == null) {
+			if (other.creationDate != null)
 				return false;
-		} else if (!chapters.equals(other.chapters))
-			return false;
-		if (comments == null) {
-			if (other.comments != null)
-				return false;
-		} else if (!comments.equals(other.comments))
-			return false;
-		if (creationDate != other.creationDate)
+		} else if (!creationDate.equals(other.creationDate))
 			return false;
 		if (id != other.id)
 			return false;
 		if (isPublished != other.isPublished)
+			return false;
+		if (modifiedDate == null) {
+			if (other.modifiedDate != null)
+				return false;
+		} else if (!modifiedDate.equals(other.modifiedDate))
 			return false;
 		if (possibleRating != other.possibleRating)
 			return false;
@@ -210,30 +202,35 @@ public class Story {
 
 	@Override
 	public String toString() {
-		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary + ", chapters="
-				+ chapters + ", comments=" + comments + ", creationDate=" + creationDate + ", bookCover=" + bookCover
-				+ ", isPublished=" + isPublished + ", actualRating=" + actualRating + ", possibleRating="
-				+ possibleRating + "]";
+		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary
+				+ ", creationDate=" + creationDate + ", bookCover=" + bookCover + ", isPublished=" + isPublished
+				+ ", actualRating=" + actualRating + ", possibleRating=" + possibleRating + ", modifiedDate="
+				+ modifiedDate + "]";
 	}
 
-	public Story(int id, String title, User author, String summary, List<Chapter> chapters, List<Comments> comments,
-			long creationDate, String bookCover, boolean isPublished, int actualRating, int possibleRating) {
+	public Story(int id, String title, User author, String summary, Long creationDate, String bookCover,
+			boolean isPublished, int actualRating, int possibleRating, Long modifiedDate) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.summary = summary;
-		this.chapters = chapters;
-		this.comments = comments;
 		this.creationDate = creationDate;
 		this.bookCover = bookCover;
 		this.isPublished = isPublished;
 		this.actualRating = actualRating;
 		this.possibleRating = possibleRating;
+		this.modifiedDate = modifiedDate;
 	}
 
 	public Story() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+
+	
+	
+
 }
