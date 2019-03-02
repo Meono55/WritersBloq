@@ -46,6 +46,6 @@ public class UserValidation {
 	 */
 	public static boolean validateName(String name) {
 		if (name == null || name.length() < 2) return false;
-		return Pattern.compile("a-zA-Z]+").matcher(name).matches();
+		return Pattern.compile("[a-zA-Z]+").matcher(name).matches();
 	}
 }
