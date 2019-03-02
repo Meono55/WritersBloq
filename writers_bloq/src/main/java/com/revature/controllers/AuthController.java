@@ -58,12 +58,23 @@ public class AuthController {
 	}
   
   /**
-   * Handle any exceptions thrown in this controller
+   * Handle any client exceptions thrown from this controller
    * @param e the exception that was thrown
    * @return the response entity to Spring to build a response for the client
    */
   @ExceptionHandler
   public ResponseEntity<String> handleHttpClienException(HttpClientErrorException e) {
     return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+  }
+  
+  /**
+   * Handle any internal exceptions thrown from this controller
+   * @param e the exception that was thrown
+   * @return the response entity to Spring to build a response for the client
+   */
+  @ExceptionHandler
+  public ResponseEntity<String> generalExceptionHandler(Exception e) {
+    // Log the exception
+    return ResponseEntity.status(500).body("An internal error has occured, please try again later");
   }
 }
