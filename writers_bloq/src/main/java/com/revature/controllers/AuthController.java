@@ -4,12 +4,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.revature.dto.CredentialsDTO;
 import com.revature.models.Token;
@@ -53,4 +56,14 @@ public class AuthController {
 	public User getLoggedInUser(@CookieValue(value="p2-token", required=false) String tokenValue) {
 		return this.authService.getLoggedInUser(tokenValue);
 	}
+  
+  /**
+   * Handle any exceptions thrown in this controller
+   * @param e the exception that was thrown
+   * @return the response entity to Spring to build a response for the client
+   */
+  @ExceptionHandler
+  public ResponseEntity<String> handleHttpClienException(HttpClientErrorException e) {
+    return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+  }
 }

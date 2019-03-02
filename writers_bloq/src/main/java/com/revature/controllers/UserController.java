@@ -63,15 +63,12 @@ public class UserController {
 	}
 	
 	/**
-	 * 
-	 * @param e
-	 * @return
+	 * Handle any exceptions thrown in this controller
+	 * @param e the exception that was thrown
+	 * @return the response entity to Spring to build a response for the client
 	 */
 	@ExceptionHandler
 	public ResponseEntity<String> handleHttpClienException(HttpClientErrorException e) {
-		String message = e.getMessage();
-		return ResponseEntity
-						.status(e.getStatusCode())
-						.body(message);
+		return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
 	}
 }
