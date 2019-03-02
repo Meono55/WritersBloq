@@ -32,6 +32,10 @@ public class AuthService {
    * @return token to represent user
    */
   public Token login(CredentialsDTO credentials) {
+	if (credentials.getEmail() == null || credentials.getPassword() == null) {
+		throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Please enter an email and password");
+	}
+	
     User user = this.userRepo.getUserByEmail(credentials.getEmail());
     
     // If credentials are invalid, throw an exception
