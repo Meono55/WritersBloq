@@ -18,9 +18,6 @@ import com.revature.models.Token;
 import com.revature.models.User;
 import com.revature.services.UserService;
 
-@CrossOrigin(
-    methods = { RequestMethod.GET, RequestMethod.POST }
-    )
 @RestController
 @RequestMapping("users")
 public class UserController {
