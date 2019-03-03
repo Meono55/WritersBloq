@@ -2,10 +2,10 @@ package com.revature.models;
 
 public class Content {
 	private int id;
-	
+
 	// Chapter where content is found
-	private int chapterId;
-	
+	private Chapter chapter;
+
 	// Chapter content information
 	private String contentType;
 	private String contentData;
@@ -18,12 +18,12 @@ public class Content {
 		this.id = id;
 	}
 
-	public int getChapterId() {
-		return chapterId;
+	public Chapter getChapter() {
+		return chapter;
 	}
 
-	public void setChapterId(int chapterId) {
-		this.chapterId = chapterId;
+	public void setChapter(Chapter chapter) {
+		this.chapter = chapter;
 	}
 
 	public String getContentType() {
@@ -46,7 +46,7 @@ public class Content {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + chapterId;
+		result = prime * result + ((chapter == null) ? 0 : chapter.hashCode());
 		result = prime * result + ((contentData == null) ? 0 : contentData.hashCode());
 		result = prime * result + ((contentType == null) ? 0 : contentType.hashCode());
 		result = prime * result + id;
@@ -62,7 +62,10 @@ public class Content {
 		if (getClass() != obj.getClass())
 			return false;
 		Content other = (Content) obj;
-		if (chapterId != other.chapterId)
+		if (chapter == null) {
+			if (other.chapter != null)
+				return false;
+		} else if (!chapter.equals(other.chapter))
 			return false;
 		if (contentData == null) {
 			if (other.contentData != null)
@@ -81,14 +84,14 @@ public class Content {
 
 	@Override
 	public String toString() {
-		return "Content [id=" + id + ", chapterId=" + chapterId + ", contentType=" + contentType + ", contentData="
+		return "Content [id=" + id + ", chapter=" + chapter + ", contentType=" + contentType + ", contentData="
 				+ contentData + "]";
 	}
 
-	public Content(int id, int chapterId, String contentType, String contentData) {
+	public Content(int id, Chapter chapter, String contentType, String contentData) {
 		super();
 		this.id = id;
-		this.chapterId = chapterId;
+		this.chapter = chapter;
 		this.contentType = contentType;
 		this.contentData = contentData;
 	}

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dto.PageDTO;
 import com.revature.models.Story;
 import com.revature.services.StoryServices;
 
@@ -60,12 +62,18 @@ public class StoryController {
 		return storyServices.getStoryById(id);
 	}
 
-	@GetMapping(path = "?query={query}&genre={genre}&tag={tag}", produces = "application/json")
-	public List<Story> filterStories(@PathVariable String query, @PathVariable String genre, @PathVariable String tag) {
-		// Get all stories
-		// Get stories by search query
-		// Get stories by genre
-		// Get stories by tag
-		return null;
+	/**
+	 * Retrieve a page of stories from the database based on a given filter.
+	 * @param query to filter the stories by
+	 * @param genre to filter the stories by
+	 * @param tag   to filter the stories by
+	 * @return the page object of the filtered stories
+	 */
+	@GetMapping(params = { "query", "genre", "tag", "page" }, produces = "application/json")
+	public PageDTO<Story> filterStories(@RequestParam("query") String query, @RequestParam("genre") String genre,
+			@RequestParam("tag") String tag, @RequestParam("page") String page) {
+		PageDTO pageDTO = new PageDTO();
+		pageDTO.setCurPage(Integer.parseInt(page));
+		return storyServices.filterStories(query, genre, tag, pageDTO);
 	}
 }

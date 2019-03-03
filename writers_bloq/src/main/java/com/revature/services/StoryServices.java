@@ -1,10 +1,13 @@
 package com.revature.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.revature.dto.PageDTO;
 import com.revature.models.Story;
 import com.revature.models.Token;
 import com.revature.repos.AuthRepo;
@@ -69,5 +72,31 @@ public class StoryServices {
 	 */
 	public Story getStoryById(int id) {
 		return storyRepo.getStoryById(id);
+	}
+
+	/**
+	 * Get a page of stories from the database where the stories satisfy a given filter.
+	 * @param query to filter the stories by
+	 * @param genre to filter the stories by
+	 * @param tag to filter the stories by
+	 * @return the page of filtered story
+	 */
+	public PageDTO<Story> filterStories(String query, String genre, String tag, PageDTO<Story> pageInfo) {
+		// Get stories by search query
+		if(query != null) {
+			return storyRepo.filterStoriesByQuery(query, pageInfo);
+		}
+		// Get stories by genre
+		else if (genre != null) {
+			return storyRepo.filterStoriesByGenre(genre, pageInfo);
+		}
+		// Get stories by tag
+		else if (tag != null) {
+			return storyRepo.filterStoriesByTag(tag, pageInfo);
+		}
+		// Get all stories
+		else {
+			return storyRepo.getAllStories(pageInfo);
+		}
 	}
 }

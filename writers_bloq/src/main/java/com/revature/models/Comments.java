@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 
 public class Comments {
 	private int id;
-	
+
 	// Author of content
-	private int authorId;
-	
+	private User author;
+
 	// Comment information
-	private int storyId;
+	private Story story;
 	private String content;
-	private LocalDateTime creationDate;
+	private long creationDate;
 	private boolean isSpoiler;
 
 	public int getId() {
@@ -22,20 +22,20 @@ public class Comments {
 		this.id = id;
 	}
 
-	public int getStoryId() {
-		return storyId;
+	public User getAuthor() {
+		return author;
 	}
 
-	public void setStoryId(int storyId) {
-		this.storyId = storyId;
+	public void setAuthor(User author) {
+		this.author = author;
 	}
 
-	public int getAuthorId() {
-		return authorId;
+	public Story getStory() {
+		return story;
 	}
 
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
+	public void setStory(Story story) {
+		this.story = story;
 	}
 
 	public String getContent() {
@@ -46,11 +46,11 @@ public class Comments {
 		this.content = content;
 	}
 
-	public LocalDateTime getCreationDate() {
+	public long getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
+	public void setCreationDate(long creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -66,12 +66,12 @@ public class Comments {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + authorId;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + (int) (creationDate ^ (creationDate >>> 32));
 		result = prime * result + id;
 		result = prime * result + (isSpoiler ? 1231 : 1237);
-		result = prime * result + storyId;
+		result = prime * result + ((story == null) ? 0 : story.hashCode());
 		return result;
 	}
 
@@ -84,38 +84,41 @@ public class Comments {
 		if (getClass() != obj.getClass())
 			return false;
 		Comments other = (Comments) obj;
-		if (authorId != other.authorId)
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
 			return false;
 		if (content == null) {
 			if (other.content != null)
 				return false;
 		} else if (!content.equals(other.content))
 			return false;
-		if (creationDate == null) {
-			if (other.creationDate != null)
-				return false;
-		} else if (!creationDate.equals(other.creationDate))
+		if (creationDate != other.creationDate)
 			return false;
 		if (id != other.id)
 			return false;
 		if (isSpoiler != other.isSpoiler)
 			return false;
-		if (storyId != other.storyId)
+		if (story == null) {
+			if (other.story != null)
+				return false;
+		} else if (!story.equals(other.story))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Comments [id=" + id + ", storyId=" + storyId + ", authorId=" + authorId + ", content=" + content
+		return "Comments [id=" + id + ", author=" + author + ", story=" + story + ", content=" + content
 				+ ", creationDate=" + creationDate + ", isSpoiler=" + isSpoiler + "]";
 	}
 
-	public Comments(int id, int storyId, int authorId, String content, LocalDateTime creationDate, boolean isSpoiler) {
+	public Comments(int id, User author, Story story, String content, long creationDate, boolean isSpoiler) {
 		super();
 		this.id = id;
-		this.storyId = storyId;
-		this.authorId = authorId;
+		this.author = author;
+		this.story = story;
 		this.content = content;
 		this.creationDate = creationDate;
 		this.isSpoiler = isSpoiler;
@@ -125,5 +128,4 @@ public class Comments {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 }
