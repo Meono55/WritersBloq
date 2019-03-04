@@ -37,15 +37,12 @@ public class Story {
 
 //	@OneToMany(fetch = FetchType.LAZY)
 //	private List<Comments> comments;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "tag_to_story", 
-			inverseJoinColumns = { @JoinColumn(name = "tag_id") }, 
-			joinColumns = { @JoinColumn(name = "story_id") })
+	@JoinTable(name = "tag_to_story", inverseJoinColumns = { @JoinColumn(name = "tag_id") }, joinColumns = {
+			@JoinColumn(name = "story_id") })
 	private List<Tag> tags;
-	
-	@OneToOne
-	private Genre genre;
+	private String genre;
 
 	@Column(name = "creation_date")
 	private Long creationDate;
@@ -62,8 +59,8 @@ public class Story {
 
 	@Column(name = "possible_rating")
 	private int possibleRating;
-	
-	@Column(name="modified_date")
+
+	@Column(name = "modified_date")
 	private Long modifiedDate;
 
 	public int getId() {
@@ -106,11 +103,11 @@ public class Story {
 		this.tags = tags;
 	}
 
-	public Genre getGenre() {
+	public String getGenre() {
 		return genre;
 	}
 
-	public void setGenre(Genre genre) {
+	public void setGenre(String genre) {
 		this.genre = genre;
 	}
 
@@ -163,85 +160,6 @@ public class Story {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + actualRating;
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + ((bookCover == null) ? 0 : bookCover.hashCode());
-		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
-		result = prime * result + id;
-		result = prime * result + (isPublished ? 1231 : 1237);
-		result = prime * result + ((modifiedDate == null) ? 0 : modifiedDate.hashCode());
-		result = prime * result + possibleRating;
-		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
-		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Story other = (Story) obj;
-		if (actualRating != other.actualRating)
-			return false;
-		if (author == null) {
-			if (other.author != null)
-				return false;
-		} else if (!author.equals(other.author))
-			return false;
-		if (bookCover == null) {
-			if (other.bookCover != null)
-				return false;
-		} else if (!bookCover.equals(other.bookCover))
-			return false;
-		if (creationDate == null) {
-			if (other.creationDate != null)
-				return false;
-		} else if (!creationDate.equals(other.creationDate))
-			return false;
-		if (genre == null) {
-			if (other.genre != null)
-				return false;
-		} else if (!genre.equals(other.genre))
-			return false;
-		if (id != other.id)
-			return false;
-		if (isPublished != other.isPublished)
-			return false;
-		if (modifiedDate == null) {
-			if (other.modifiedDate != null)
-				return false;
-		} else if (!modifiedDate.equals(other.modifiedDate))
-			return false;
-		if (possibleRating != other.possibleRating)
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		if (tags == null) {
-			if (other.tags != null)
-				return false;
-		} else if (!tags.equals(other.tags))
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary + ", tags=" + tags
 				+ ", genre=" + genre + ", creationDate=" + creationDate + ", bookCover=" + bookCover + ", isPublished="
@@ -249,7 +167,7 @@ public class Story {
 				+ ", modifiedDate=" + modifiedDate + "]";
 	}
 
-	public Story(int id, String title, User author, String summary, List<Tag> tags, Genre genre, Long creationDate,
+	public Story(int id, String title, User author, String summary, List<Tag> tags, String genre, Long creationDate,
 			String bookCover, boolean isPublished, int actualRating, int possibleRating, Long modifiedDate) {
 		super();
 		this.id = id;

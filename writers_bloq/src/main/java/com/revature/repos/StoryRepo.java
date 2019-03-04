@@ -65,7 +65,6 @@ public class StoryRepo {
 		try (Session session = sf.openSession()) {
 			return session.get(Story.class, id);
 		}
-
 	}
 
 	/**
@@ -80,10 +79,17 @@ public class StoryRepo {
 		try (Session session = sf.openSession()) {
 			List<?> stories = session
 					.createQuery("select s from Story s where s.title like :query order by s.creationDate desc")
-					.setFirstResult(pageInfo.getCurPage() * pageInfo.getPageSize())
-					.setMaxResults((pageInfo.getCurPage() + 1) * pageInfo.getPageSize())
 					.setParameter("query", query, StringType.INSTANCE).list();
-			pageInfo.setStories((List<Story>) stories);
+			pageInfo.setResultCount(stories.size());
+
+			// Create the page array for the stories
+			List<Story> pageArray = new ArrayList<Story>();
+			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
+			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
+				pageArray.add((Story)stories.get(i));
+				i++;
+			}
+			pageInfo.setStories(pageArray);
 			return pageInfo;
 		}
 	}
@@ -98,11 +104,18 @@ public class StoryRepo {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
 			List<?> stories = session
-					.createQuery("select s from Story s where s.genre.name = :genre order by s.creationDate desc")
-					.setFirstResult(pageInfo.getCurPage() * pageInfo.getPageSize())
-					.setMaxResults((pageInfo.getCurPage() + 1) * pageInfo.getPageSize())
+					.createQuery("select s from Story s where s.genre = :genre order by s.creationDate desc")
 					.setParameter("genre", genre, StringType.INSTANCE).list();
-			pageInfo.setStories((List<Story>) stories);
+			pageInfo.setResultCount(stories.size());
+
+			// Create the page array for the stories
+			List<Story> pageArray = new ArrayList<Story>();
+			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
+			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
+				pageArray.add((Story)stories.get(i));
+				i++;
+			}
+			pageInfo.setStories(pageArray);
 			return pageInfo;
 		}
 	}
@@ -122,12 +135,14 @@ public class StoryRepo {
 			// Get the sorted stories associated with the tag
 			List<Story> stories = tagObject.getStories();
 			stories.sort((a, b) -> Long.compare(a.getCreationDate(), b.getCreationDate()));
+			pageInfo.setResultCount(stories.size());
 
 			// Create the page array for the stories
 			List<Story> pageArray = new ArrayList<Story>();
-			for (int i = pageInfo.getCurPage() * pageInfo.getPageSize(); i < (pageInfo.getCurPage() + 1)
-					* pageInfo.getPageSize(); i++) {
-				pageArray.add(stories.get(i));
+			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
+			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
+				pageArray.add((Story)stories.get(i));
+				i++;
 			}
 			pageInfo.setStories(pageArray);
 			return pageInfo;
@@ -143,10 +158,17 @@ public class StoryRepo {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
 			// Get the stories from the database
-			List<?> stories = session.createQuery("select s from Story s order by s.creationDate desc")
-					.setFirstResult(pageInfo.getCurPage() * pageInfo.getPageSize())
-					.setMaxResults((pageInfo.getCurPage() + 1) * pageInfo.getPageSize()).list();
-			pageInfo.setStories((List<Story>) stories);
+			List<?> stories = session.createQuery("select s from Story s order by s.creationDate desc").list();
+			pageInfo.setResultCount(stories.size());
+
+			// Create the page array for the stories
+			List<Story> pageArray = new ArrayList<Story>();
+			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
+			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
+				pageArray.add((Story)stories.get(i));
+				i++;
+			}
+			pageInfo.setStories(pageArray);
 			return pageInfo;
 		}
 	}

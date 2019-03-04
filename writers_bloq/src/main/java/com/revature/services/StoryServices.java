@@ -1,7 +1,5 @@
 package com.revature.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,21 +10,22 @@ import com.revature.models.Story;
 import com.revature.models.Token;
 import com.revature.repos.AuthRepo;
 import com.revature.repos.StoryRepo;
+import com.revature.repos.TagRepo;
 
 @Service
 public class StoryServices {
 	StoryRepo storyRepo;
 	AuthRepo authRepo;
+	TagRepo tagRepo;
 
 
 	@Autowired
-	public StoryServices(StoryRepo storyRepo, AuthRepo authRepo) {
+	public StoryServices(StoryRepo storyRepo, AuthRepo authRepo, TagRepo tagRepo) {
 		super();
 		this.storyRepo = storyRepo;
 		this.authRepo = authRepo;
+		this.tagRepo = tagRepo;
 	}
-
-
 
 	/**
 	 * Validate user input, creates a new story in the database using the StoryRepo.
@@ -46,6 +45,9 @@ public class StoryServices {
 		newStory.setCreationDate(System.currentTimeMillis());
 		newStory.setModifiedDate(System.currentTimeMillis());
 		newStory.setAuthor(token.getUser());
+		
+		// Load the tags from the database
+		newStory.setTags(tagRepo.loadTags(newStory.getTags()));
 
 		// Save story to database
 		return storyRepo.saveStory(newStory);

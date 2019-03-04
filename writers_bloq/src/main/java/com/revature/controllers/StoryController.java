@@ -1,7 +1,5 @@
 package com.revature.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,10 +68,11 @@ public class StoryController {
 	 * @param tag   to filter the stories by
 	 * @return the page object of the filtered stories
 	 */
-	@GetMapping(params = { "query", "genre", "tag", "page" }, produces = "application/json")
-	public PageDTO<Story> filterStories(@RequestParam("query") String query, @RequestParam("genre") String genre,
-			@RequestParam("tag") String tag, @RequestParam("page") String page) {
-		PageDTO pageDTO = new PageDTO();
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+	public PageDTO<Story> filterStories(@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "genre", required = false) String genre,
+			@RequestParam(value = "tag", required = false) String tag, @RequestParam("page") String page) {
+		PageDTO<Story> pageDTO = new PageDTO<Story>();
 		pageDTO.setCurPage(Integer.parseInt(page));
 		return storyServices.filterStories(query, genre, tag, pageDTO);
 	}

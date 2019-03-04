@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PageDTO<T> {
 	private List<T> stories;
 	private int curPage;
+	private int resultCount;
 
 	@JsonIgnore
 	private int pageSize = 10;
@@ -27,12 +28,19 @@ public class PageDTO<T> {
 		this.curPage = curPage;
 	}
 
+	public int getResultCount() {
+		return resultCount;
+	}
+
+	public void setResultCount(int resultCount) {
+		this.resultCount = resultCount;
+	}
+
 	public int getPageSize() {
 		return pageSize;
 	}
 
 	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
 	}
 
 	@Override
@@ -41,6 +49,7 @@ public class PageDTO<T> {
 		int result = 1;
 		result = prime * result + curPage;
 		result = prime * result + pageSize;
+		result = prime * result + resultCount;
 		result = prime * result + ((stories == null) ? 0 : stories.hashCode());
 		return result;
 	}
@@ -58,6 +67,8 @@ public class PageDTO<T> {
 			return false;
 		if (pageSize != other.pageSize)
 			return false;
+		if (resultCount != other.resultCount)
+			return false;
 		if (stories == null) {
 			if (other.stories != null)
 				return false;
@@ -68,13 +79,15 @@ public class PageDTO<T> {
 
 	@Override
 	public String toString() {
-		return "PageDTO [stories=" + stories + ", curPage=" + curPage + ", pageSize=" + pageSize + "]";
+		return "PageDTO [stories=" + stories + ", curPage=" + curPage + ", resultCount=" + resultCount + ", pageSize="
+				+ pageSize + "]";
 	}
 
-	public PageDTO(List<T> stories, int curPage, int pageSize) {
+	public PageDTO(List<T> stories, int curPage, int resultCount, int pageSize) {
 		super();
 		this.stories = stories;
 		this.curPage = curPage;
+		this.resultCount = resultCount;
 		this.pageSize = pageSize;
 	}
 
