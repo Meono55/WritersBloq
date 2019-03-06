@@ -51,6 +51,18 @@ public class AuthRepo {
   }
   
   
+  /**
+   * Finds and deletes an existing token
+   * @param tokenValue
+   */
+  public void deleteToken(String tokenValue) {
+    SessionFactory sf = emf.unwrap(SessionFactory.class);
+    try (Session session = sf.openSession()) {
+      Token token = session.get(Token.class, tokenValue);
+      session.delete(token);
+    }
+  }
+  
   
   /**
    * Gets a token in from the database
