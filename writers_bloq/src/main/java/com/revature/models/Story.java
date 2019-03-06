@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -32,11 +31,13 @@ public class Story {
 
 	private String summary;
 
-//	@OneToMany(fetch = FetchType.LAZY)
-//	private List<Chapter> chapters;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="story_id") // Watch out here
+	private List<Chapter> chapters;
 
-//	@OneToMany(fetch = FetchType.LAZY)
-//	private List<Comments> comments;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "story_id")
+	private List<Comments> comments;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "tag_to_story", inverseJoinColumns = { @JoinColumn(name = "tag_id") }, joinColumns = {
@@ -93,6 +94,22 @@ public class Story {
 
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+
+	public List<Chapter> getChapters() {
+		return chapters;
+	}
+
+	public void setChapters(List<Chapter> chapters) {
+		this.chapters = chapters;
+	}
+
+	public List<Comments> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comments> comments) {
+		this.comments = comments;
 	}
 
 	public List<Tag> getTags() {
@@ -160,20 +177,114 @@ public class Story {
 	}
 
 	@Override
-	public String toString() {
-		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary + ", tags=" + tags
-				+ ", genre=" + genre + ", creationDate=" + creationDate + ", bookCover=" + bookCover + ", isPublished="
-				+ isPublished + ", actualRating=" + actualRating + ", possibleRating=" + possibleRating
-				+ ", modifiedDate=" + modifiedDate + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + actualRating;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + ((bookCover == null) ? 0 : bookCover.hashCode());
+		result = prime * result + ((chapters == null) ? 0 : chapters.hashCode());
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
+		result = prime * result + id;
+		result = prime * result + (isPublished ? 1231 : 1237);
+		result = prime * result + ((modifiedDate == null) ? 0 : modifiedDate.hashCode());
+		result = prime * result + possibleRating;
+		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
 	}
 
-	public Story(int id, String title, User author, String summary, List<Tag> tags, String genre, Long creationDate,
-			String bookCover, boolean isPublished, int actualRating, int possibleRating, Long modifiedDate) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Story other = (Story) obj;
+		if (actualRating != other.actualRating)
+			return false;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (bookCover == null) {
+			if (other.bookCover != null)
+				return false;
+		} else if (!bookCover.equals(other.bookCover))
+			return false;
+		if (chapters == null) {
+			if (other.chapters != null)
+				return false;
+		} else if (!chapters.equals(other.chapters))
+			return false;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
+			return false;
+		if (creationDate == null) {
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
+			return false;
+		if (genre == null) {
+			if (other.genre != null)
+				return false;
+		} else if (!genre.equals(other.genre))
+			return false;
+		if (id != other.id)
+			return false;
+		if (isPublished != other.isPublished)
+			return false;
+		if (modifiedDate == null) {
+			if (other.modifiedDate != null)
+				return false;
+		} else if (!modifiedDate.equals(other.modifiedDate))
+			return false;
+		if (possibleRating != other.possibleRating)
+			return false;
+		if (summary == null) {
+			if (other.summary != null)
+				return false;
+		} else if (!summary.equals(other.summary))
+			return false;
+		if (tags == null) {
+			if (other.tags != null)
+				return false;
+		} else if (!tags.equals(other.tags))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary + ", chapters="
+				+ chapters + ", comments=" + comments + ", tags=" + tags + ", genre=" + genre + ", creationDate="
+				+ creationDate + ", bookCover=" + bookCover + ", isPublished=" + isPublished + ", actualRating="
+				+ actualRating + ", possibleRating=" + possibleRating + ", modifiedDate=" + modifiedDate + "]";
+	}
+
+	public Story(int id, String title, User author, String summary, List<Chapter> chapters, List<Comments> comments,
+			List<Tag> tags, String genre, Long creationDate, String bookCover, boolean isPublished, int actualRating,
+			int possibleRating, Long modifiedDate) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.summary = summary;
+		this.chapters = chapters;
+		this.comments = comments;
 		this.tags = tags;
 		this.genre = genre;
 		this.creationDate = creationDate;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -63,7 +64,10 @@ public class StoryRepo {
 	public Story getStoryById(int id) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
-			return session.get(Story.class, id);
+			Story story = session.get(Story.class, id);
+			Hibernate.initialize(story.getChapters());
+			Hibernate.initialize(story.getComments());
+			return story;
 		}
 	}
 
@@ -78,9 +82,10 @@ public class StoryRepo {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		query = "%" + query + "%";
 		try (Session session = sf.openSession()) {
+			String fullQuery = "%" + query + "%";
 			List<?> stories = session
-					.createQuery("select s from Story s where s.title like :query order by s.creationDate desc")
-					.setParameter("query", query, StringType.INSTANCE).list();
+					.createQuery("select s from Story s where lower(s.title) like lower(:query) order by s.creationDate desc")
+					.setParameter("query", fullQuery, StringType.INSTANCE).list();
 			pageInfo.setResultCount(stories.size());
 
 			// Create the page array for the stories
@@ -88,6 +93,8 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -114,6 +121,8 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -133,6 +142,12 @@ public class StoryRepo {
 			Tag tagObject = (Tag) session.createQuery("select t from Tag t where t.name like :tag")
 					.setParameter("tag", tag).uniqueResult();
 
+			// Checks if the tag does not exist
+			if (tagObject == null) {
+				pageInfo.setStories(new ArrayList<Story>());
+				return pageInfo;
+			}
+			
 			// Get the sorted stories associated with the tag
 			List<Story> stories = tagObject.getStories();
 			stories.sort((a, b) -> Long.compare(a.getCreationDate(), b.getCreationDate()));
@@ -143,6 +158,8 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -167,6 +184,8 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);

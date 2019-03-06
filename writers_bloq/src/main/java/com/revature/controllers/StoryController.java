@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dto.PageDTO;
+import com.revature.models.Chapter;
+import com.revature.models.Comments;
 import com.revature.models.Story;
+import com.revature.services.ChapterServices;
+import com.revature.services.CommentServices;
 import com.revature.services.StoryServices;
 
 @RestController
@@ -21,11 +27,16 @@ import com.revature.services.StoryServices;
 public class StoryController {
 
 	StoryServices storyServices;
+	ChapterServices chapterServices;
+	CommentServices commentServices;
 
 	@Autowired
-	public StoryController(StoryServices storyServices) {
+	public StoryController(StoryServices storyServices, ChapterServices chapterServices,
+			CommentServices commentServices) {
 		super();
 		this.storyServices = storyServices;
+		this.chapterServices = chapterServices;
+		this.commentServices = commentServices;
 	}
 
 	/**
@@ -75,5 +86,48 @@ public class StoryController {
 		PageDTO<Story> pageDTO = new PageDTO<Story>();
 		pageDTO.setCurPage(Integer.parseInt(page));
 		return storyServices.filterStories(query, genre, tag, pageDTO);
+	}
+
+	/**
+	 * Creates a new chapter for the story
+	 * @param id of the story
+	 * @return the newly created chapter
+	 */
+	@PostMapping(path = "/{id}/chapters", produces = "application/json")
+	public Chapter startChapter(@PathVariable int id, @RequestBody Chapter newChapter) {
+		return chapterServices.createChapter(newChapter, id);
+	}
+
+	/**
+	 * Get all chapters of the story
+	 * @param id of the story
+	 * @return all chapters of the story
+	 */
+	@GetMapping(path = "/{id}/chapters", produces = "application/json")
+	public List<Chapter> getAllChapters(@PathVariable int id) {
+		return chapterServices.getAllChapters(id);
+	}
+
+	/**
+	 * Create a new comment about a story.
+	 * @param id         of the story to comment on
+	 * @param newComment to be added to the story
+	 * @param tokenValue that references the user authoring the comment
+	 * @return the comment about the story
+	 */
+	@PostMapping(path = "/{id}/comments", produces = "application/json")
+	public Comments createComment(@PathVariable int id, @RequestBody Comments newComment,
+			@CookieValue(value = "p2-token", required = false) String tokenValue) {
+		return commentServices.createComment(id, newComment, tokenValue);
+	}
+	
+	/**
+	 * Get all comments associated with the story.
+	 * @param id of the story to get the comments from
+	 * @return the list of comments of the story
+	 */
+	@GetMapping(path = "/{id}/comments", produces = "application/json")
+	public List<Comments> getComments(@PathVariable int id) {
+		return commentServices.getComments(id);
 	}
 }
