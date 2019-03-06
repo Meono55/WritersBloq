@@ -30,7 +30,6 @@ public class UserRepo {
     }
   }
   
-  
   /**
    * Creates an entry in the database for a new user
    * @param user to be saved
