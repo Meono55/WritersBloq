@@ -32,9 +32,9 @@ public class HibernateConfig {
     System.out.println("Configuring data source");
     BasicDataSource dataSource = new BasicDataSource();
     dataSource.setDriverClassName("org.postgresql.Driver");
-    dataSource.setUrl("jdbc:postgresql://localhost:5432/p2-db");
-    dataSource.setUsername("postgres");
-    dataSource.setPassword(System.getenv("pgsql_local"));
+    dataSource.setUrl(System.getenv("p2url"));
+    dataSource.setUsername(System.getenv("p2username"));
+    dataSource.setPassword(System.getenv("p2password"));
     return dataSource;
   }
   
