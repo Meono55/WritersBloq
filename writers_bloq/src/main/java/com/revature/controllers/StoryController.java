@@ -84,16 +84,6 @@ public class StoryController {
 	}
 	
 	/**
-	 * Get all chapters from the story
-	 * @param id of the story to get chapters from
-	 * @return a list of chapters
-	 */
-//	@GetMapping(path = "/{id}/chapters")
-//	public List<Chapter> getChapters(@PathVariable int id) {
-//		return storyServices.getStoryById(id).getChapters();
-//	}
-	
-	/**
 	 * Creates a new chapter for the story
 	 * @param id of the story
 	 * @return the newly created chapter

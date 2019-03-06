@@ -138,6 +138,12 @@ public class StoryRepo {
 			Tag tagObject = (Tag) session.createQuery("select t from Tag t where t.name like :tag")
 					.setParameter("tag", tag).uniqueResult();
 
+			// Checks if the tag does not exist
+			if (tagObject == null) {
+				pageInfo.setStories(new ArrayList<Story>());
+				return pageInfo;
+			}
+			
 			// Get the sorted stories associated with the tag
 			List<Story> stories = tagObject.getStories();
 			stories.sort((a, b) -> Long.compare(a.getCreationDate(), b.getCreationDate()));

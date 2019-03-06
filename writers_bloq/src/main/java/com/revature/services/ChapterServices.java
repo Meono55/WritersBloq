@@ -2,8 +2,6 @@ package com.revature.services;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +43,24 @@ public class ChapterServices {
 	 */
 	public List<Chapter> getAllChapters(int id) {
 		return chapterRepo.getAllChapters(id);
+	}
+
+	/**
+	 * Get a specific chapter from a story
+	 * @param chapterId of the chapter to get
+	 * @return the specific chapter from the database
+	 */
+	public Chapter getChapterById(int chapterId) {
+		return chapterRepo.getChapterById(chapterId);
+	}
+
+	/**
+	 * Updates a chapter.
+	 * @param chapterId of the chapter to update
+	 * @param chapter object holding the updated chapter
+	 * @return the updated chapter
+	 */
+	public Chapter updateChapter(int chapterId, Chapter chapter) {
+		return chapterRepo.updateChapter(chapterId, chapter);
 	}
 }

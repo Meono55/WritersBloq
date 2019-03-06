@@ -9,7 +9,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -59,6 +58,41 @@ public class ChapterRepo {
 				chapters.add(c);
 			}
 			return chapters;
+		}
+	}
+
+	/**
+	 * Get a specific chapter from a story
+	 * @param chapterId of the chapter to get
+	 * @return the specific chapter from the database
+	 */
+	public Chapter getChapterById(int chapterId) {
+		SessionFactory sf = emf.unwrap(SessionFactory.class);
+		try (Session session = sf.openSession()) {
+			Chapter chapter = session.get(Chapter.class, chapterId);
+			Hibernate.initialize(chapter);
+			return chapter;
+		}
+	}
+
+	/**
+	 * Updates a chapter.
+	 * @param chapterId of the chapter to update
+	 * @param chapter object holding the updated chapter
+	 * @return the updated chapter
+	 */
+	public Chapter updateChapter(int chapterId, Chapter chapter) {
+		SessionFactory sf = emf.unwrap(SessionFactory.class);
+		try (Session session = sf.openSession()) {
+			Transaction tx = session.beginTransaction();
+			Chapter currentStory = session.get(Chapter.class, chapterId);
+			
+			// Update the chapter
+			currentStory.setPublished(chapter.isPublished());
+			currentStory.setTitle(chapter.getTitle());
+			session.merge(currentStory);
+			tx.commit();
+			return currentStory;
 		}
 	}
 	
