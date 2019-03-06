@@ -48,6 +48,15 @@ public class AuthService {
   }
   
   
+  /**
+   * Logout a user by deleting the token value from the database
+   * @param tokenValue
+   */
+  public void logout(String tokenValue) {
+    if (tokenValue == null) return;
+    this.authRepo.deleteToken(tokenValue);
+  }
+  
   
   /**
    * Checks to see if the token value provided corresponds to a user, this means the user has been logged in earlier

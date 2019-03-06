@@ -18,7 +18,6 @@ import com.revature.models.User;
 
 @Configuration
 public class HibernateConfig {
-
 	@Bean
 	public LocalSessionFactoryBean getSessionFactory() {
 		System.out.println("Configuring session factory");
@@ -49,5 +48,4 @@ public class HibernateConfig {
 		transactionManager.setSessionFactory(getSessionFactory().getObject());
 		return transactionManager;
 	}
-
 }
