@@ -1,18 +1,37 @@
 package com.revature.models;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "chapters")
 public class Chapter {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	// Chapter story information
-	private Story story;
 	private String title;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name="content_id")
 	private List<Content> content;
 
 	// Chapter publishing details
+	@Column(name = "creation_date")
 	private long creationDate;
+
+	@Column(name = "is_published")
 	private boolean isPublished;
 
 	public int getId() {
@@ -21,14 +40,6 @@ public class Chapter {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Story getStory() {
-		return story;
-	}
-
-	public void setStory(Story story) {
-		this.story = story;
 	}
 
 	public String getTitle() {
@@ -71,7 +82,6 @@ public class Chapter {
 		result = prime * result + (int) (creationDate ^ (creationDate >>> 32));
 		result = prime * result + id;
 		result = prime * result + (isPublished ? 1231 : 1237);
-		result = prime * result + ((story == null) ? 0 : story.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -96,11 +106,6 @@ public class Chapter {
 			return false;
 		if (isPublished != other.isPublished)
 			return false;
-		if (story == null) {
-			if (other.story != null)
-				return false;
-		} else if (!story.equals(other.story))
-			return false;
 		if (title == null) {
 			if (other.title != null)
 				return false;
@@ -111,14 +116,13 @@ public class Chapter {
 
 	@Override
 	public String toString() {
-		return "Chapter [id=" + id + ", story=" + story + ", title=" + title + ", content=" + content
-				+ ", creationDate=" + creationDate + ", isPublished=" + isPublished + "]";
+		return "Chapter [id=" + id + ", title=" + title + ", content=" + content + ", creationDate=" + creationDate
+				+ ", isPublished=" + isPublished + "]";
 	}
 
-	public Chapter(int id, Story story, String title, List<Content> content, long creationDate, boolean isPublished) {
+	public Chapter(int id, String title, List<Content> content, long creationDate, boolean isPublished) {
 		super();
 		this.id = id;
-		this.story = story;
 		this.title = title;
 		this.content = content;
 		this.creationDate = creationDate;
@@ -129,4 +133,5 @@ public class Chapter {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 }

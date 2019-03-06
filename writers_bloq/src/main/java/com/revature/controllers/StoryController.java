@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dto.PageDTO;
+import com.revature.models.Chapter;
 import com.revature.models.Story;
+import com.revature.services.ChapterServices;
 import com.revature.services.StoryServices;
 
 @RestController
@@ -21,11 +25,13 @@ import com.revature.services.StoryServices;
 public class StoryController {
 
 	StoryServices storyServices;
+	ChapterServices chapterServices;
 
 	@Autowired
-	public StoryController(StoryServices storyServices) {
+	public StoryController(StoryServices storyServices, ChapterServices chapterServices) {
 		super();
 		this.storyServices = storyServices;
+		this.chapterServices = chapterServices;
 	}
 
 	/**
@@ -76,4 +82,35 @@ public class StoryController {
 		pageDTO.setCurPage(Integer.parseInt(page));
 		return storyServices.filterStories(query, genre, tag, pageDTO);
 	}
+	
+	/**
+	 * Get all chapters from the story
+	 * @param id of the story to get chapters from
+	 * @return a list of chapters
+	 */
+//	@GetMapping(path = "/{id}/chapters")
+//	public List<Chapter> getChapters(@PathVariable int id) {
+//		return storyServices.getStoryById(id).getChapters();
+//	}
+	
+	/**
+	 * Creates a new chapter for the story
+	 * @param id of the story
+	 * @return the newly created chapter
+	 */
+	@PostMapping(path = "/{id}/chapters")
+	public Chapter startChapter(@PathVariable int id, @RequestBody Chapter newChapter) {
+		return chapterServices.createChapter(newChapter, id);
+	}
+	
+	/**
+	 * Get all chapters of the story
+	 * @param id of the story
+	 * @return all chapters of the story
+	 */
+	@GetMapping(path = "/{id}/chapters")
+	public List<Chapter> getAllChapters(@PathVariable int id) {
+		return chapterServices.getAllChapters(id);
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -63,7 +64,9 @@ public class StoryRepo {
 	public Story getStoryById(int id) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
-			return session.get(Story.class, id);
+			Story story = session.get(Story.class, id);
+			Hibernate.initialize(story.getChapters());
+			return story;
 		}
 	}
 
@@ -77,9 +80,10 @@ public class StoryRepo {
 	public PageDTO<Story> filterStoriesByQuery(String query, PageDTO<Story> pageInfo) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
+			String fullQuery = "%" + query + "%";
 			List<?> stories = session
-					.createQuery("select s from Story s where s.title like :query order by s.creationDate desc")
-					.setParameter("query", query, StringType.INSTANCE).list();
+					.createQuery("select s from Story s where lower(s.title) like lower(:query) order by s.creationDate desc")
+					.setParameter("query", fullQuery, StringType.INSTANCE).list();
 			pageInfo.setResultCount(stories.size());
 
 			// Create the page array for the stories
@@ -87,6 +91,7 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -113,6 +118,7 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -142,6 +148,7 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -166,6 +173,7 @@ public class StoryRepo {
 			int i = pageInfo.getCurPage() * pageInfo.getPageSize();
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
+				Hibernate.initialize(pageArray.get(i).getChapters());
 				i++;
 			}
 			pageInfo.setStories(pageArray);

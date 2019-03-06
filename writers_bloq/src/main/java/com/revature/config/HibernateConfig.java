@@ -9,6 +9,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
+import com.revature.models.Chapter;
+import com.revature.models.Content;
 import com.revature.models.Story;
 import com.revature.models.Tag;
 import com.revature.models.Token;
@@ -24,7 +26,7 @@ public class HibernateConfig {
 		factoryBean.setConfigLocation(new ClassPathResource("hibernate.cfg.xml"));
 
 		// Set annotated Classes
-		factoryBean.setAnnotatedClasses(User.class, Token.class, Story.class, Tag.class);
+		factoryBean.setAnnotatedClasses(User.class, Token.class, Story.class, Tag.class, Chapter.class, Content.class);
 		factoryBean.setDataSource(getDataSource());
 		return factoryBean;
 	}
