@@ -24,7 +24,7 @@ public class Chapter {
 	private String title;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="content_id")
+	@JoinColumn(name="chapter_id")
 	private List<Content> content;
 
 	// Chapter publishing details

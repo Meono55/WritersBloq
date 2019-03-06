@@ -32,7 +32,7 @@ public class Story {
 	private String summary;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="chapter_Id")
+	@JoinColumn(name="story_Id")
 	private List<Chapter> chapters;
 
 //	@OneToMany(fetch = FetchType.LAZY)

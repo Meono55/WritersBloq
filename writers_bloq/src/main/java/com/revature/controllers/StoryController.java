@@ -88,7 +88,7 @@ public class StoryController {
 	 * @param id of the story
 	 * @return the newly created chapter
 	 */
-	@PostMapping(path = "/{id}/chapters")
+	@PostMapping(path = "/{id}/chapters", produces = "application/json")
 	public Chapter startChapter(@PathVariable int id, @RequestBody Chapter newChapter) {
 		return chapterServices.createChapter(newChapter, id);
 	}
@@ -98,7 +98,7 @@ public class StoryController {
 	 * @param id of the story
 	 * @return all chapters of the story
 	 */
-	@GetMapping(path = "/{id}/chapters")
+	@GetMapping(path = "/{id}/chapters", produces = "application/json")
 	public List<Chapter> getAllChapters(@PathVariable int id) {
 		return chapterServices.getAllChapters(id);
 	}

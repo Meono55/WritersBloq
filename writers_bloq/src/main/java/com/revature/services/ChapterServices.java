@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Chapter;
+import com.revature.models.Content;
 import com.revature.repos.ChapterRepo;
 import com.revature.repos.StoryRepo;
 
@@ -62,5 +63,43 @@ public class ChapterServices {
 	 */
 	public Chapter updateChapter(int chapterId, Chapter chapter) {
 		return chapterRepo.updateChapter(chapterId, chapter);
+	}
+
+	/**
+	 * Adds a content object to the chapter of a story.
+	 * @param id of the chapter to add the content to
+	 * @param content to add to the chapter
+	 * @return the new content that was added to the chapter
+	 */
+	public Content createContent(int id, Content content) {
+		return chapterRepo.createContent(id, content);
+	}
+
+	/**
+	 * Get all of a chapter's content from the database.
+	 * @param id of the chapter to get the content from
+	 * @return the list of a chapter's content
+	 */
+	public List<Content> getAllContent(int id) {
+		return chapterRepo.getAllContent(id);
+	}
+
+	/**
+	 * Get specific content from a chapter.
+	 * @param id of the content to get from the chapter
+	 * @return the chapter associated with the contentId value
+	 */
+	public Content getContentById(int id) {
+		return chapterRepo.getContentById(id);
+	}
+
+	/**
+	 * Update the values of the content of a chapter.
+	 * @param id of the content to update
+	 * @param updatedContent to replace the old content with
+	 * @return the updated content
+	 */
+	public Content updateContent(int id, Content updatedContent) {
+		return chapterRepo.updateContent(id, updatedContent);
 	}
 }
