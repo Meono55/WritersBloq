@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dto.PageDTO;
 import com.revature.models.Chapter;
+import com.revature.models.Comments;
 import com.revature.models.Story;
 import com.revature.services.ChapterServices;
+import com.revature.services.CommentServices;
 import com.revature.services.StoryServices;
 
 @RestController
@@ -26,12 +28,15 @@ public class StoryController {
 
 	StoryServices storyServices;
 	ChapterServices chapterServices;
+	CommentServices commentServices;
 
 	@Autowired
-	public StoryController(StoryServices storyServices, ChapterServices chapterServices) {
+	public StoryController(StoryServices storyServices, ChapterServices chapterServices,
+			CommentServices commentServices) {
 		super();
 		this.storyServices = storyServices;
 		this.chapterServices = chapterServices;
+		this.commentServices = commentServices;
 	}
 
 	/**
@@ -82,7 +87,7 @@ public class StoryController {
 		pageDTO.setCurPage(Integer.parseInt(page));
 		return storyServices.filterStories(query, genre, tag, pageDTO);
 	}
-	
+
 	/**
 	 * Creates a new chapter for the story
 	 * @param id of the story
@@ -92,7 +97,7 @@ public class StoryController {
 	public Chapter startChapter(@PathVariable int id, @RequestBody Chapter newChapter) {
 		return chapterServices.createChapter(newChapter, id);
 	}
-	
+
 	/**
 	 * Get all chapters of the story
 	 * @param id of the story
@@ -102,5 +107,27 @@ public class StoryController {
 	public List<Chapter> getAllChapters(@PathVariable int id) {
 		return chapterServices.getAllChapters(id);
 	}
+
+	/**
+	 * Create a new comment about a story.
+	 * @param id         of the story to comment on
+	 * @param newComment to be added to the story
+	 * @param tokenValue that references the user authoring the comment
+	 * @return the comment about the story
+	 */
+	@PostMapping(path = "/{id}/comments", produces = "application/json")
+	public Comments createComment(@PathVariable int id, @RequestBody Comments newComment,
+			@CookieValue(value = "p2-token", required = false) String tokenValue) {
+		return commentServices.createComment(id, newComment, tokenValue);
+	}
 	
+	/**
+	 * Get all comments associated with the story.
+	 * @param id of the story to get the comments from
+	 * @return the list of comments of the story
+	 */
+	@GetMapping(path = "/{id}/comments", produces = "application/json")
+	public List<Comments> getComments(@PathVariable int id) {
+		return commentServices.getComments(id);
+	}
 }
