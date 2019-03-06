@@ -66,6 +66,7 @@ public class StoryRepo {
 		try (Session session = sf.openSession()) {
 			Story story = session.get(Story.class, id);
 			Hibernate.initialize(story.getChapters());
+			Hibernate.initialize(story.getComments());
 			return story;
 		}
 	}
@@ -92,6 +93,7 @@ public class StoryRepo {
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
 				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -119,6 +121,7 @@ public class StoryRepo {
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
 				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -155,6 +158,7 @@ public class StoryRepo {
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
 				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
@@ -180,6 +184,7 @@ public class StoryRepo {
 			while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
 				pageArray.add((Story)stories.get(i));
 				Hibernate.initialize(pageArray.get(i).getChapters());
+				Hibernate.initialize(pageArray.get(i).getComments());
 				i++;
 			}
 			pageInfo.setStories(pageArray);
