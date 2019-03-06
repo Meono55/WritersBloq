@@ -32,11 +32,12 @@ public class Story {
 	private String summary;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="story_Id")
+	@JoinColumn(name="story_id") // Watch out here
 	private List<Chapter> chapters;
 
-//	@OneToMany(fetch = FetchType.LAZY)
-//	private List<Comments> comments;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "story_id")
+	private List<Comments> comments;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "tag_to_story", inverseJoinColumns = { @JoinColumn(name = "tag_id") }, joinColumns = {
@@ -101,6 +102,14 @@ public class Story {
 
 	public void setChapters(List<Chapter> chapters) {
 		this.chapters = chapters;
+	}
+
+	public List<Comments> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comments> comments) {
+		this.comments = comments;
 	}
 
 	public List<Tag> getTags() {
@@ -175,6 +184,7 @@ public class Story {
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((bookCover == null) ? 0 : bookCover.hashCode());
 		result = prime * result + ((chapters == null) ? 0 : chapters.hashCode());
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
 		result = prime * result + id;
@@ -212,6 +222,11 @@ public class Story {
 			if (other.chapters != null)
 				return false;
 		} else if (!chapters.equals(other.chapters))
+			return false;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
 			return false;
 		if (creationDate == null) {
 			if (other.creationDate != null)
@@ -255,13 +270,13 @@ public class Story {
 	@Override
 	public String toString() {
 		return "Story [id=" + id + ", title=" + title + ", author=" + author + ", summary=" + summary + ", chapters="
-				+ chapters + ", tags=" + tags + ", genre=" + genre + ", creationDate=" + creationDate + ", bookCover="
-				+ bookCover + ", isPublished=" + isPublished + ", actualRating=" + actualRating + ", possibleRating="
-				+ possibleRating + ", modifiedDate=" + modifiedDate + "]";
+				+ chapters + ", comments=" + comments + ", tags=" + tags + ", genre=" + genre + ", creationDate="
+				+ creationDate + ", bookCover=" + bookCover + ", isPublished=" + isPublished + ", actualRating="
+				+ actualRating + ", possibleRating=" + possibleRating + ", modifiedDate=" + modifiedDate + "]";
 	}
 
-	public Story(int id, String title, User author, String summary, List<Chapter> chapters, List<Tag> tags,
-			String genre, Long creationDate, String bookCover, boolean isPublished, int actualRating,
+	public Story(int id, String title, User author, String summary, List<Chapter> chapters, List<Comments> comments,
+			List<Tag> tags, String genre, Long creationDate, String bookCover, boolean isPublished, int actualRating,
 			int possibleRating, Long modifiedDate) {
 		super();
 		this.id = id;
@@ -269,6 +284,7 @@ public class Story {
 		this.author = author;
 		this.summary = summary;
 		this.chapters = chapters;
+		this.comments = comments;
 		this.tags = tags;
 		this.genre = genre;
 		this.creationDate = creationDate;
@@ -283,6 +299,4 @@ public class Story {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	
 }

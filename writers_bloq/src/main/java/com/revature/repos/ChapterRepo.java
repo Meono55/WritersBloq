@@ -53,18 +53,9 @@ public class ChapterRepo {
 	public List<Chapter> getAllChapters(int id) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try (Session session = sf.openSession()) {
-			
-			// Get a list of proxies of the story's chapters
 			List<Chapter> storyChapters = session.get(Story.class, id).getChapters();
 			Hibernate.initialize(storyChapters);
 			return storyChapters;
-//			List<Chapter> chapters = new ArrayList<Chapter>();
-//			
-//			// Instantiate the return list to be the values of the list of proxies
-//			for (Chapter c: storyChapters) {
-//				chapters.add(c);
-//			}
-//			return chapters;
 		}
 	}
 
@@ -122,8 +113,8 @@ public class ChapterRepo {
 			currentChapter.getContent().add(content);
 			session.merge(currentChapter);
 			tx.commit();
+			return content;
 		}
-		return null;
 	}
 
 	/**
@@ -134,17 +125,9 @@ public class ChapterRepo {
 	public List<Content> getAllContent(int id) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
 		try(Session session = sf.openSession()) {
-			// Get the list of proxy content from the chapter
 			List<Content> proxyContents = session.get(Chapter.class, id).getContent();
 			Hibernate.initialize(proxyContents);
 			return proxyContents;
-//			List<Content> contents = new ArrayList<Content>();
-//			
-//			// Instantiate the proxies to get their values
-//			for(Content c : proxyContents) {
-//				contents.add(c);
-//			}
-//			return contents;
 		}
 	}
 
@@ -181,7 +164,7 @@ public class ChapterRepo {
 			currentContent.setContentData(updatedContent.getContentData());
 			session.merge(currentContent);
 			tx.commit();
+			return updatedContent;
 		}
-		return updatedContent;
 	}
 }
