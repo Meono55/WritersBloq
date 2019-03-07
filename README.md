@@ -52,23 +52,23 @@ The back end will use different CRUD operations depending on whether or not said
 #### What is an Anonymous User
 Anonymous users run the application while not logged into an account. All users start out as anonymous and change to a registered user when they signup or login to an account.
 #### Applicable Actions
-1. **[Search for stories](#story-search)**
-2. **[Select story](#select-story)**
-3. **[Log into an account](#log-into-an-account)**
-4. **[Register a new account](#register-a-new-account)**
+1. [Search for stories](#story-search)
+2. [Select story](#select-story)
+3. [Log into an account](#log-into-an-account)
+4. [Register a new account](#register-a-new-account)
 
 ---
 ### Registered Users
 #### What is a Registered User
 Registered users run the application while logged into a registered account. Registered users become anonymous when they log out of their account.
 #### Applicable Actions
-1. **[Search for stories](#story-search)**
-2. **[Select story](#select-story)**
-3. **[Comment on selected story](#comment-on-selected-story)**
-4. **[Create new story](#create-new-story)**
-5. **[Work on created story](#work-on-created-story)**
-6. **[Update story status](#update-story-status)**
-7. **[Log out of account](#log-out-of-account)**
+1. [Search for stories](#story-search)
+2. [Select story](#select-story)
+3. [Comment on selected story](#comment-on-selected-story)
+4. [Create new story](#create-new-story)
+5. [Work on created story](#work-on-created-story)
+6. [Update story status](#update-story-status)
+7. [Log out of account](#log-out-of-account)
 
 ---
 ### Action Descriptions
