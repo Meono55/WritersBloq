@@ -8,6 +8,7 @@ import com.revature.models.Token;
 import com.revature.models.User;
 import com.revature.repos.AuthRepo;
 import com.revature.repos.UserRepo;
+import com.revature.utils.UserValidation;
 
 @Service
 public class UserService {
@@ -29,6 +30,7 @@ public class UserService {
    */
   public Token register(User user) {
     // Validate user and protect the password
+	UserValidation.validateUser(user);
     user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
     
     // Save the user and generate a token for the user

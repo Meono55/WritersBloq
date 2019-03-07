@@ -1,13 +1,24 @@
 package com.revature.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "contents")
 public class Content {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	// Chapter where content is found
-	private int chapterId;
-	
+
 	// Chapter content information
+	@Column(name = "content_type")
 	private String contentType;
+
+	@Column(name = "content_data")
 	private String contentData;
 
 	public int getId() {
@@ -16,14 +27,6 @@ public class Content {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getChapterId() {
-		return chapterId;
-	}
-
-	public void setChapterId(int chapterId) {
-		this.chapterId = chapterId;
 	}
 
 	public String getContentType() {
@@ -46,7 +49,6 @@ public class Content {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + chapterId;
 		result = prime * result + ((contentData == null) ? 0 : contentData.hashCode());
 		result = prime * result + ((contentType == null) ? 0 : contentType.hashCode());
 		result = prime * result + id;
@@ -62,8 +64,6 @@ public class Content {
 		if (getClass() != obj.getClass())
 			return false;
 		Content other = (Content) obj;
-		if (chapterId != other.chapterId)
-			return false;
 		if (contentData == null) {
 			if (other.contentData != null)
 				return false;
@@ -81,14 +81,12 @@ public class Content {
 
 	@Override
 	public String toString() {
-		return "Content [id=" + id + ", chapterId=" + chapterId + ", contentType=" + contentType + ", contentData="
-				+ contentData + "]";
+		return "Content [id=" + id + ", contentType=" + contentType + ", contentData=" + contentData + "]";
 	}
 
-	public Content(int id, int chapterId, String contentType, String contentData) {
+	public Content(int id, String contentType, String contentData) {
 		super();
 		this.id = id;
-		this.chapterId = chapterId;
 		this.contentType = contentType;
 		this.contentData = contentData;
 	}
@@ -97,4 +95,5 @@ public class Content {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 }
