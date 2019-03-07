@@ -80,6 +80,7 @@ public class StoryRepo {
 	 */
 	public PageDTO<Story> filterStoriesByQuery(String query, PageDTO<Story> pageInfo) {
 		SessionFactory sf = emf.unwrap(SessionFactory.class);
+		query = "%" + query + "%";
 		try (Session session = sf.openSession()) {
 			String fullQuery = "%" + query + "%";
 			List<?> stories = session

@@ -73,7 +73,13 @@ public class StoryServices {
 	 * @return the story object of the retrieved story.
 	 */
 	public Story getStoryById(int id) {
-		return storyRepo.getStoryById(id);
+		Story story = storyRepo.getStoryById(id);
+		
+		if(story == null) {
+			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Story not Found!");
+		}
+		else return story;
+		
 	}
 
 	/**
