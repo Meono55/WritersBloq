@@ -108,9 +108,15 @@ public class ChapterRepo {
 			// Save content to database
 			content.setId((int) session.save(content));
 			
+			
 			// Add content to chapter
 			Chapter currentChapter = session.get(Chapter.class, id);
-			currentChapter.getContent().add(content);
+      List<Content> contents = currentChapter.getContent();
+      if (contents == null) {
+        contents = new ArrayList<>();
+      }
+      contents.add(content);
+      currentChapter.setContent(contents);
 			session.merge(currentChapter);
 			tx.commit();
 			return content;
