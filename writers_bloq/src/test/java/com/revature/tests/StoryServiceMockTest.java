@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.revature.models.Story;
-import com.revature.models.Token;
-import com.revature.models.User;
 import com.revature.repos.AuthRepo;
 import com.revature.repos.StoryRepo;
 import com.revature.repos.TagRepo;
@@ -58,22 +56,6 @@ public class StoryServiceMockTest {
 			fail();
 		} catch (HttpClientErrorException e) {
 			assertThat("Client Error is 404", e.getStatusCode(), is(HttpStatus.NOT_FOUND));
-		}
-
-	}
-
-	@Test
-	public void invalidTokenForCreationTest() {
-
-		when(mockAuthRepo.getToken("12312312")).thenReturn(null);
-
-		try {
-			Token token = new Token();
-			Story story = new Story();
-			storyService.createStory(story, "12312312");
-			fail();
-		} catch (HttpClientErrorException e) {
-			assertThat("401 Unauthorized", e.getStatusCode(), is(HttpStatus.UNAUTHORIZED));
 		}
 
 	}
