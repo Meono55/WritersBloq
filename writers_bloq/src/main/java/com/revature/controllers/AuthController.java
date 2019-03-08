@@ -64,7 +64,10 @@ public class AuthController {
 	 * @param tokenValue
 	 */
 	@DeleteMapping("")
-	public void logout(@CookieValue(value="p2-token", required = false) String tokenValue) {
+	public void logout(@CookieValue(value="p2-token", required = false) String tokenValue,
+	    HttpServletResponse res) {
+	  Cookie cookie = new Cookie("p2-token", "");
+	  res.addCookie(cookie);
 	  this.authService.logout(tokenValue);
 	}
 	

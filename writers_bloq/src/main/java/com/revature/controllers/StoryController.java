@@ -77,15 +77,20 @@ public class StoryController {
 	 * @param query to filter the stories by
 	 * @param genre to filter the stories by
 	 * @param tag   to filter the stories by
+	 * @param page  number to be queried for
+	 * @param forUser to determine if user is querying for their stories 
+	 * @param tokenValue token stored in cookie used to identify current user
 	 * @return the page object of the filtered stories
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
 	public PageDTO<Story> filterStories(@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "genre", required = false) String genre,
-			@RequestParam(value = "tag", required = false) String tag, @RequestParam("page") String page) {
+			@RequestParam(value = "tag", required = false) String tag, @RequestParam("page") String page,
+			@RequestParam(value = "forUser", required = false) String forUser, 
+			@CookieValue(value = "p2-token", required = false) String tokenValue) {
 		PageDTO<Story> pageDTO = new PageDTO<Story>();
 		pageDTO.setCurPage(Integer.parseInt(page));
-		return storyServices.filterStories(query, genre, tag, pageDTO);
+		return storyServices.filterStories(query, genre, tag, forUser, tokenValue, pageDTO);
 	}
 
 	/**

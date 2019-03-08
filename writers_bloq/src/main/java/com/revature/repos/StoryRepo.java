@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.revature.dto.PageDTO;
 import com.revature.models.Story;
 import com.revature.models.Tag;
+import com.revature.models.User;
 
 @Repository
 public class StoryRepo {
@@ -70,7 +71,38 @@ public class StoryRepo {
 			return story;
 		}
 	}
+	
+	
+	/**
+	 * Gets a page of stories for the logged in user
+	 * @param tokenValue to identify the logged in user
+	 * @param pageInfo created page object to add the found stories into
+	 * @return a page of stories
+	 */
+	public PageDTO<Story> getUserStories(User author, PageDTO<Story> pageInfo) {
+	  SessionFactory sf = emf.unwrap((SessionFactory.class));
+	  try (Session session = sf.openSession()) {
+	    List<?> stories = session
+	        .createQuery("select s from Story s where s.author.id = :id order by s.creationDate desc")
+	        .setParameter("id", author.getId())
+	        .list();
+	    pageInfo.setResultCount(stories.size());
 
+      // Create the page array for the stories
+      List<Story> pageArray = new ArrayList<Story>();
+      int i = pageInfo.getCurPage() * pageInfo.getPageSize();
+      while(i < pageInfo.getResultCount() && i < (pageInfo.getCurPage() + 1) * pageInfo.getPageSize()) {
+        pageArray.add((Story)stories.get(i));
+        Hibernate.initialize(pageArray.get(i).getChapters());
+        Hibernate.initialize(pageArray.get(i).getComments());
+        i++;
+      }
+      pageInfo.setStories(pageArray);
+      return pageInfo;
+	  }
+	}
+
+	
 	/**
 	 * Get a page of stories from the database whose titles are similar to a given
 	 * query.

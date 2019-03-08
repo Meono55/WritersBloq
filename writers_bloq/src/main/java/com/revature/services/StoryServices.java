@@ -7,23 +7,22 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.revature.dto.PageDTO;
 import com.revature.models.Story;
-import com.revature.models.Token;
-import com.revature.repos.AuthRepo;
+import com.revature.models.User;
 import com.revature.repos.StoryRepo;
 import com.revature.repos.TagRepo;
 
 @Service
 public class StoryServices {
 	StoryRepo storyRepo;
-	AuthRepo authRepo;
+	AuthService authService;
 	TagRepo tagRepo;
 
 
 	@Autowired
-	public StoryServices(StoryRepo storyRepo, AuthRepo authRepo, TagRepo tagRepo) {
+	public StoryServices(StoryRepo storyRepo, AuthService authService, TagRepo tagRepo) {
 		super();
 		this.storyRepo = storyRepo;
-		this.authRepo = authRepo;
+		this.authService = authService;
 		this.tagRepo = tagRepo;
 	}
 
@@ -35,16 +34,13 @@ public class StoryServices {
 	 *         not be added to the database
 	 */
 	public Story createStory(Story newStory, String tokenValue) {
-		// Validate story
-		Token token = authRepo.getToken(tokenValue);
-		if(token == null) {
-			throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Please log into your account");
-		}
+		// Get author
+	  User author = this.authService.getLoggedInUser(tokenValue);
 		
 		// Initialize auto-generated values
 		newStory.setCreationDate(System.currentTimeMillis());
 		newStory.setModifiedDate(System.currentTimeMillis());
-		newStory.setAuthor(token.getUser());
+		newStory.setAuthor(author);
 		
 		// Load the tags from the database
 		newStory.setTags(tagRepo.loadTags(newStory.getTags()));
@@ -63,6 +59,7 @@ public class StoryServices {
 		currStory.setModifiedDate(System.currentTimeMillis());
 		currStory.setTitle(updatedStory.getTitle());
 		currStory.setSummary(updatedStory.getSummary());
+		currStory.setPublished(updatedStory.isPublished());
 		
 		return storyRepo.editStory(currStory);
 	}
@@ -87,11 +84,20 @@ public class StoryServices {
 	 * @param query to filter the stories by
 	 * @param genre to filter the stories by
 	 * @param tag to filter the stories by
+   * @param forUser to determine if user is querying for their stories 
+   * @param tokenValue token to identify the current user with
 	 * @return the page of filtered story
 	 */
-	public PageDTO<Story> filterStories(String query, String genre, String tag, PageDTO<Story> pageInfo) {
+	public PageDTO<Story> filterStories(String query, String genre, String tag, String forUser, String tokenValue,
+	    PageDTO<Story> pageInfo) {
+	  // Get stories for user
+	  if (forUser != null) {
+	    System.out.println(tokenValue);
+	    User author = this.authService.getLoggedInUser(tokenValue);
+	    return storyRepo.getUserStories(author, pageInfo);
+	  }
 		// Get stories by search query
-		if(query != null) {
+	  else if(query != null) {
 			return storyRepo.filterStoriesByQuery(query, pageInfo);
 		}
 		// Get stories by genre

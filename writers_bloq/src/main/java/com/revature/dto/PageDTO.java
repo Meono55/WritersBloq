@@ -2,14 +2,12 @@ package com.revature.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageDTO<T> {
 	private List<T> stories;
 	private int curPage;
 	private int resultCount;
 
-	@JsonIgnore
 	private int pageSize = 10;
 
 	public List<T> getStories() {
