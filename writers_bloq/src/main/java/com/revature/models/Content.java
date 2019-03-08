@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +19,7 @@ public class Content {
 	@Column(name = "content_type")
 	private String contentType;
 
+	@Lob
 	@Column(name = "content_data")
 	private String contentData;
 
